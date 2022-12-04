@@ -1,0 +1,8 @@
+{
+    "datafile_dir" : "data\\",
+    "power_generation_data" : "한국지역난방공사_태양광발전소 일별 운영현황(분당_수원_청주_양산)_20220331.csv",
+    "sunshine_data" : "수원일조.csv",
+    "temperature_data" : "수원기온.csv",
+    "humidity_data" : "수원습도.csv",
+    "precipitation_data" : "수원강수량.csv"
+}
