@@ -9,7 +9,7 @@ drop_cols = ['분당', '청주', '양산']
 rename_col = {'수원' : '발전량'}
 start_date = '2019-09-01'
 end_date = '2022-03-31'
-date_col_name = '일시'
+date_col_name = ('일시', '실적일자')
 place_col_name = '지점명'
 
 def get_data_filename_list():
@@ -30,13 +30,17 @@ def get_data(merged=False):
         if key == powergeneration_key:
             data_list[key] = data_list[key].drop(drop_cols, axis=1)\
                                             .rename(columns=rename_col)
-            merged_df = data_list[key]
+            data_list[key][date_col_name[1]] = pd.to_datetime(data_list[key][date_col_name[1]])
+            merged_df['year'] = data_list[key][date_col_name[1]].dt.year
+            merged_df['month'] = data_list[key][date_col_name[1]].dt.month
+            merged_df['day'] = data_list[key][date_col_name[1]].dt.day
+            merged_df = pd.concat([merged_df, data_list[key].iloc[:,1:]], axis=1)
         #날씨 정보의 경우 2019-09-01이상인 것으로 필터링
         else:
-            temp_data = data_list[key][date_col_name]
+            temp_data = data_list[key][date_col_name[0]]
             mask = (start_date <= temp_data) & (temp_data <= end_date)
             data_list[key] = data_list[key][mask].reset_index(drop=True)
-            merged_df = pd.concat([merged_df, data_list[key].drop([date_col_name, place_col_name], axis=1)],axis=1)
+            merged_df = pd.concat([merged_df, data_list[key].drop([date_col_name[0], place_col_name], axis=1)],axis=1)
 
     if merged == True:
         return merged_df
