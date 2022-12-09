@@ -5,15 +5,15 @@ import os, sys
 import seaborn as sns
 from mpl_toolkits.mplot3d import Axes3D
 
-english_dict = {'발전량':'Power Generation',
-                '일조합(hr)':'Time of sunshine(hr)',
-                '일조율(%)':'Percentage of sunshine(%)',
-                '일사합(MJ/m2)':'Amount of sunshine(MJ/m2)',
-                '평균기온(℃)':'Average Temperature(℃)',
-                '최고기온(℃)':'Maximum Temperature(℃)',
-                '최저기온(℃)':'Minimum Temperature(℃)',
-                '평균습도(%rh)':'Average Humid(%rh)',
-                '최저습도(%rh)':'Minmum Humid(%rh)',
+english_dict = {'발전량':'PowerGeneration',
+                '일조합(hr)':'Timeofsunshine(hr)',
+                '일조율(%)':'Percentageofsunshine(%)',
+                '일사합(MJ/m2)':'Amountofsunshine(MJ/m2)',
+                '평균기온(℃)':'AverageTemperature(℃)',
+                '최고기온(℃)':'MaximumTemperature(℃)',
+                '최저기온(℃)':'MinimumTemperature(℃)',
+                '평균습도(%rh)':'AverageHumid(%rh)',
+                '최저습도(%rh)':'MinmumHumid(%rh)',
                 '강수량(mm)':'Precipitation(mm)'}
 
 image_path = '.\\result\\images\\'
@@ -70,7 +70,9 @@ def make_images_result(l):
     plt.title('Scatter of Power Gneration')
     plt.ylabel('amount of sunshine')
     plt.xlabel('hours of sunshine')
-    plt.savefig(image_path+'Scatter of Power Gneration')
+    plt.savefig(image_path+'Scatter of Power Gneration.png')
+
+
 
 if __name__ == "__main__":
     getdata.set_font()
@@ -81,6 +83,10 @@ if __name__ == "__main__":
 
     make_csv_result(df_groupedby_month_year, df_groupedby_pg)
     make_images_result(df_groupedby_month_year.median())
+
+    #make every plot
+    grid_ndf = sns.pairplot(df[df.PowerGeneration < 5000].drop(['month', 'year', 'day'], axis=1))
+    plt.savefig(image_path+'All relatioin.png')
 
 
    
