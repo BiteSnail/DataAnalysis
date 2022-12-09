@@ -1,5 +1,6 @@
 import os, json
 import pandas as pd
+from matplotlib import font_manager, rc
 
 configpath = "\\src\\common\\config.json"
 powergeneration_key = "power_generation_data"
@@ -12,7 +13,11 @@ end_date = '2022-03-31'
 date_col_name = ('일시', '실적일자')
 place_col_name = '지점명'
 
-def get_data_filename_list():
+def set_font(file_path="c:\\Windows\\Fonts\\malgun.ttf"):
+    font_name = font_manager.FontProperties(fname=file_path).get_name()
+    rc('font', family=font_name)
+
+def _get_data_filename_list():
     # return config path data list
     with open(os.getcwd() + configpath, 'r', encoding="UTF-8") as json_file:
         file_list = json.load(json_file)
@@ -20,7 +25,7 @@ def get_data_filename_list():
 
 def get_data(merged=False):
     # return data from csvs
-    file_list = get_data_filename_list()
+    file_list = _get_data_filename_list()
     data_list = {}
     merged_df = pd.DataFrame()
 
