@@ -2,7 +2,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
 from sklearn.preprocessing import PolynomialFeatures
 from sklearn.metrics import mean_squared_error
-import savedata
+from src import savedata
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
@@ -32,14 +32,16 @@ def get_predictmodel(x, y, test_size=0.3, random_state=10, make_image=True):
     y_hat_test = pr.predict(x_test_poly)
 
     if(make_image):
-        key = savedata.english_dict.values()
-        for i in range(0, 10):
+        key = list(savedata.english_dict.values())
+        for i in range(1, len(key)):
             plt.figure(figsize=(10,5))
+            plt.rcParams['axes.unicode_minus'] = False
             plt.plot(x_train[key[i]], y_train, 'o', alpha=0.5,label='Train')
             plt.plot(x_test[key[i]], y_hat_test, '+', label='Predict')
             plt.legend(loc='best'); plt.title(key[i] + 'Prediction')
             plt.xlabel(key[i]); plt.ylabel('power')
-            plt.savefig(savedata.save_images_result+key[i]+' Prediction.png')
+            plt.savefig(savedata.image_path+key[i]+' Prediction.png')
+            plt.close()
         
     return pr, x_train, x_test, y_train, y_test
 
@@ -48,6 +50,7 @@ def pridict(pr, x, y):
     y_hat = pr.predict(x_ploy)
 
     plt.figure(figsize=(10, 5))
+    plt.rcParams['axes.unicode_minus'] = False
     ax1 = sns.distplot(y, hist=False, label='y')
     ax2 = sns.distplot(y_hat, hist=False, label='y_hat', ax=ax1)
     plt.legend()

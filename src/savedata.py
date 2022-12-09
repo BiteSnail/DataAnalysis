@@ -1,17 +1,17 @@
 import os
 import pandas as pd
-import matplotlib as plt
+import matplotlib.pyplot as plt
 import seaborn as sns
 from mpl_toolkits.mplot3d import Axes3D
 
 image_path = '.\\result\\images\\'
 saved_path = ".\\result\\"
-file_prefix_name = "test"
+file_prefix_name = "\\files\\"
 file_format = ".csv"
 english_dict = {'발전량':'PowerGeneration',
                 '일조합(hr)':'Timeofsunshine(hr)',
                 '일조율(%)':'Percentageofsunshine(%)',
-                '일사합(MJ/m2)':'Amountofsunshine(MJ/m2)',
+                '일사합(MJ/m2)':'Amountofsunshine(MJ_m2)',
                 '평균기온(℃)':'AverageTemperature(℃)',
                 '최고기온(℃)':'MaximumTemperature(℃)',
                 '최저기온(℃)':'MinimumTemperature(℃)',
@@ -29,7 +29,7 @@ def save_csv_result(df_groupedby_month_year, df_groupedby_pg):
     indexmedian = powermedian.reset_index()
     powermean = df_groupedby_pg.mean()
     
-    pp = powermedian.pivot('year', 'month', english_dict['발전량'])
+    pp = indexmedian.pivot('year', 'month', english_dict['발전량'])
     for i in range(2019, 2023, 1):
         save_data(powermedian.xs(i, level='year').corr(), 'corr'+str(i))
     save_data(pp, 'tablepowermax')
@@ -41,6 +41,7 @@ def save_images_result(l, df=pd.DataFrame()):
     #make bar plot
     l.plot(kind='bar', y=english_dict['발전량'])
     plt.title('Monthly solar power median')
+    plt.rcParams['axes.unicode_minus'] = False
     plt.ylabel('amount of solar power')
     plt.xlabel('year-month')
     plt.savefig(image_path+'Monthly solar power median.png')
@@ -48,6 +49,7 @@ def save_images_result(l, df=pd.DataFrame()):
     #make heatmap plot
     colormap = plt.cm.PuBu
     plt.figure(figsize=(10, 8))
+    plt.rcParams['axes.unicode_minus'] = False
     plt.title("Power Generation Correlation of Climate", y = 1.05, size = 15)
     sns.heatmap(l.astype(float).corr(), linewidths = 0.1, vmax = 1.0,
             square = True, cmap = colormap, linecolor = "white", annot = True, annot_kws = {"size" : 16})
@@ -61,8 +63,12 @@ def save_images_result(l, df=pd.DataFrame()):
 
     #make scatter plot
     fig = plt.figure(figsize=(6, 6))
+    plt.rcParams['axes.unicode_minus'] = False
     ax = fig.add_subplot(111, projection='3d')
-    ax.scatter(deviation['일조합(hr)'], deviation['일사합(MJ/m2)'],deviation['발전량'], marker='o', s=15, cmap='Greens')
+    ax.scatter(deviation[english_dict['일조합(hr)']], \
+                deviation[english_dict['일사합(MJ/m2)']],
+                deviation[english_dict['발전량']], 
+                marker='o', s=15, cmap='Greens')
     plt.title('Scatter of Power Gneration')
     plt.ylabel('amount of sunshine')
     plt.xlabel('hours of sunshine')
@@ -70,4 +76,5 @@ def save_images_result(l, df=pd.DataFrame()):
 
     #make every plot
     sns.pairplot(df[df.PowerGeneration < 5000].drop(['month', 'year', 'day'], axis=1))
+    plt.rcParams['axes.unicode_minus'] = False
     plt.savefig(image_path+'All relatioin.png')

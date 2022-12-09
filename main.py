@@ -13,14 +13,20 @@ def grouping(df):
     return groupedby_month_year, groupedby_pg
 
 if __name__ == "__main__":
+    print('===<program start>===')
     getdata.set_font()
+    print('Complete Loading Font')
     df = getdata.get_data(True)
+    print('Complete Loading Data')
     df.rename(columns = savedata.english_dict, inplace=True)
+    print('Complete translate column name korean to english')
 
     df_groupedby_month_year, df_groupedby_pg = grouping(df)
 
     savedata.save_csv_result(df_groupedby_month_year, df_groupedby_pg)
+    print('Complete save csv')
     savedata.save_images_result(df_groupedby_month_year.median(), df)
+    print('Complete save plot image')
 
     x, y = predictdata.preprocess(df)
     pr, x_train, x_test, y_train, y_test = predictdata.get_predictmodel(x, y)
