@@ -1,7 +1,7 @@
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
 from sklearn.preprocessing import PolynomialFeatures
-from sklearn.metrics import mean_squared_error
+from sklearn.metrics import mean_squared_error, classification_report, confusion_matrix
 from src import savedata
 import pandas as pd
 import seaborn as sns
@@ -58,5 +58,7 @@ def pridict(pr, x, y):
 
     MSE = mean_squared_error(y, y_hat)
     RMSE = mean_squared_error(y, y_hat, squared=False)
+
+    print('Accuracy: ', pr.score(x_ploy, y))
 
     return MSE, RMSE
