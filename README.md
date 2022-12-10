@@ -1,6 +1,9 @@
 # DataAnalysis
 Data Analysis for power generation by clamatic conditions.
 
+## Manual
+`$ python main.py`
+
 ## Develop Environment
 `python` >= 3.9.13   
 `require` == [link](requirements.txt)   
